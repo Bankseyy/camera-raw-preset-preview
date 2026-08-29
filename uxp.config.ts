@@ -1,4 +1,4 @@
-/* RAW PREVIEW V2 - docked-height layout fix */
+/* RAW PREVIEW V3 - restore the working webview manifest compatibility */
 import { UXP_Manifest, UXP_Config, UXP_Config_Extra } from "vite-uxp-plugin";
 import { version } from "./package.json";
 
@@ -19,12 +19,11 @@ const manifest: UXP_Manifest = {
   name,
   version,
   main: "index.html",
-  manifestVersion: 4,
+  manifestVersion: 6,
   host: [
     {
       app: "PS",
       minVersion: "24.4.0",
-      data: { apiVersion: 2 },
     },
                       ],
   entrypoints: [
