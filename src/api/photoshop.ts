@@ -1,4 +1,4 @@
-/* RAW PREVIEW V5 - forward layer delete shortcuts from the panel */
+/* RAW PREVIEW V6 - forward Photoshop undo shortcut from the panel */
 import { photoshop } from "../globals";
 
 export {
@@ -85,6 +85,24 @@ export const deleteSelectedLayers = async (): Promise<void> => {
         throw error;
       }
     }, { commandName: "Delete Selected Layer" });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const undoLastPhotoshopAction = async (): Promise<void> => {
+  try {
+    await photoshop.core.executeAsModal(async () => {
+      try {
+        await (photoshop.action.batchPlay as any)([{
+          _obj: "undo",
+          _target: [{ _ref: "historyState", _enum: "ordinal", _value: "targetEnum" }],
+          _options: { dialogOptions: "dontDisplay" },
+        }], {});
+      } catch (error) {
+        throw error;
+      }
+    }, { commandName: "Undo" });
   } catch (error) {
     throw error;
   }

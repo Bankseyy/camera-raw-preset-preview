@@ -1,4 +1,4 @@
-/* RAW PREVIEW V5 - forward layer delete shortcuts from the panel */
+/* RAW PREVIEW V6 - forward Photoshop undo shortcut from the panel */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./raw-preview.scss";
 import * as webviewAPI from "./webview-api";
@@ -80,6 +80,14 @@ export const App = () => {
       const target = event.target as HTMLElement | null;
       const tagName = target?.tagName.toLowerCase();
       if (tagName === "input" || tagName === "textarea" || tagName === "select" || target?.isContentEditable) return;
+      if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "z") {
+        event.preventDefault();
+        event.stopPropagation();
+        void (api as any).undoLastPhotoshopAction()
+          .catch(() => {})
+          .finally(releaseFocus);
+        return;
+      }
       if ((event.key !== "Delete" && event.key !== "Backspace") || event.ctrlKey || event.metaKey || event.altKey) return;
 
       event.preventDefault();
