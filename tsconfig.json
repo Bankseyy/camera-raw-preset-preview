@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "composite": false,
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "types": ["@adobe/cc-ext-uxp-types", "@types/photoshop", "@types/node"]
+  },
+  "include": [
+    "./src/main.tsx",
+    "./src/globals.ts",
+    "./src/vite-env.d.ts",
+    "./src/webview-setup-host.ts",
+    "./src/api/api.ts",
+    "./src/api/photoshop.ts",
+    "./src/api/uxp.ts",
+    "./src/api/tools/cameraRawPresetPreview.ts"
+  ]
+}

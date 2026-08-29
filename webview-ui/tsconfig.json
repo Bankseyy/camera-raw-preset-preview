@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "composite": false,
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "types": ["node"]
+  },
+  "files": [
+    "./src/vite-env.d.ts",
+    "./src/webview-api.ts",
+    "./src/webview-setup.ts",
+    "./src/webview.ts",
+    "./src/index-webview-react.tsx",
+    "./src/main-webview.tsx"
+  ]
+}

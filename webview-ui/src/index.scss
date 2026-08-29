@@ -1,0 +1,97 @@
+@use "../../src/variables.scss" as *;
+html,
+body {
+  background-color: #1b1b1b;
+  background-color: var(--uxp-host-background-color);
+  font:
+    100%/1.5 "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  > * {
+    margin-top: 1rem;
+  }
+}
+.code {
+  font-family: "Courier New", monospace;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+button {
+  transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+}
+textarea {
+  width: calc(100vw - 8rem);
+  height: 110px;
+  resize: none;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+p {
+  font-size: 1rem;
+}
+.app {
+  // background-color: #282c34;
+  text-align: center;
+}
+
+
+.stack-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-size: 2.5rem;
+  }
+}
+
+.logo {
+  height: 4rem;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo-lg {
+  height: 6rem;
+}
+.read-the-docs {
+  color: #888;
+}
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > * {
+    margin-right: 0.5rem;
+  }
+}
+
+.stack-colors {
+  display: flex;
+  flex-direction: row;
+
+  div {
+    height: 0.75rem;
+    width: 1.5rem;
+    margin-right: 0.5rem;
+    border-radius: 5px;
+    transition: 1rem;
+    background-color: black;
+  }
+}
+
