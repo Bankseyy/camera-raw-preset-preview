@@ -1,4 +1,4 @@
-/* RAW PREVIEW V6 - forward Photoshop undo shortcut from the panel */
+/* RAW PREVIEW V7 - use documented Photoshop history for panel undo */
 import { photoshop } from "../globals";
 
 export {
@@ -93,15 +93,15 @@ export const deleteSelectedLayers = async (): Promise<void> => {
 export const undoLastPhotoshopAction = async (): Promise<void> => {
   try {
     await photoshop.core.executeAsModal(async () => {
-      try {
-        await (photoshop.action.batchPlay as any)([{
-          _obj: "undo",
-          _target: [{ _ref: "historyState", _enum: "ordinal", _value: "targetEnum" }],
-          _options: { dialogOptions: "dontDisplay" },
-        }], {});
-      } catch (error) {
-        throw error;
-      }
+      const document = photoshop.app.activeDocument as any;
+      if (!document) throw new Error("Open a document before undoing.");
+
+      const states = Array.from<any>(document.historyStates ?? []);
+      const activeStateId = Number(document.activeHistoryState?.id || 0);
+      const activeIndex = states.findIndex(state => Number(state.id) === activeStateId);
+      if (activeIndex <= 0) throw new Error("There is no earlier history state to undo.");
+
+      document.activeHistoryState = states[activeIndex - 1];
     }, { commandName: "Undo" });
   } catch (error) {
     throw error;

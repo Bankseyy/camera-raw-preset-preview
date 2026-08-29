@@ -1,4 +1,4 @@
-/* RAW PREVIEW V6 - forward Photoshop undo shortcut from the panel */
+/* RAW PREVIEW V7 - use documented Photoshop history for panel undo */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./raw-preview.scss";
 import * as webviewAPI from "./webview-api";
