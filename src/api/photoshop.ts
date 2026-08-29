@@ -1,4 +1,4 @@
-/* RAW PREVIEW V4 - Photoshop keyboard focus handoff */
+/* RAW PREVIEW V5 - forward layer delete shortcuts from the panel */
 import { photoshop } from "../globals";
 
 export {
@@ -70,6 +70,24 @@ export const releasePhotoshopFocus = async (): Promise<void> => {
     focusReleaseInFlight = null;
   });
   return focusReleaseInFlight;
+};
+
+export const deleteSelectedLayers = async (): Promise<void> => {
+  try {
+    await photoshop.core.executeAsModal(async () => {
+      try {
+        await (photoshop.action.batchPlay as any)([{
+          _obj: "delete",
+          _target: [{ _ref: "layer", _enum: "ordinal", _value: "targetEnum" }],
+          _options: { dialogOptions: "dontDisplay" },
+        }], {});
+      } catch (error) {
+        throw error;
+      }
+    }, { commandName: "Delete Selected Layer" });
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const notify = async (message: string): Promise<void> => {

@@ -1,4 +1,4 @@
-/* RAW PREVIEW V4 - Photoshop keyboard focus handoff */
+/* RAW PREVIEW V5 - forward layer delete shortcuts from the panel */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./raw-preview.scss";
 import * as webviewAPI from "./webview-api";
@@ -73,6 +73,25 @@ export const App = () => {
   useEffect(() => () => {
     if (hoverTimer.current !== null) window.clearTimeout(hoverTimer.current);
   }, []);
+
+  useEffect(() => {
+    const forwardLayerDelete = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) return;
+      const target = event.target as HTMLElement | null;
+      const tagName = target?.tagName.toLowerCase();
+      if (tagName === "input" || tagName === "textarea" || tagName === "select" || target?.isContentEditable) return;
+      if ((event.key !== "Delete" && event.key !== "Backspace") || event.ctrlKey || event.metaKey || event.altKey) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      void (api as any).deleteSelectedLayers()
+        .catch(() => {})
+        .finally(releaseFocus);
+    };
+
+    document.addEventListener("keydown", forwardLayerDelete, true);
+    return () => document.removeEventListener("keydown", forwardLayerDelete, true);
+  }, [api, releaseFocus]);
 
   const chooseFolder = async () => {
     try {
