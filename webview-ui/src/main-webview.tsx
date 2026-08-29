@@ -1,4 +1,4 @@
-/* RAW PREVIEW V7 - use documented Photoshop history for panel undo */
+/* RAW PREVIEW V8 - blue preset-initial cards */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./raw-preview.scss";
 import * as webviewAPI from "./webview-api";
@@ -11,6 +11,12 @@ type Folder = { name: string; persistent: boolean };
 const cleanError = (error: unknown): string => {
   const message = error instanceof Error ? error.message : String(error || "Unknown error");
   return message.replace(/^Error:\s*/i, "");
+};
+
+const presetInitials = (name: string): string => {
+  const parts = name.replace(/([a-z\d])([A-Z])/g, "$1 $2").match(/[A-Za-z0-9]+/g) ?? [];
+  if (parts.length >= 2) return `${parts[0]![0] ?? ""}${parts[1]![0] ?? ""}`.toUpperCase();
+  return (parts[0] || name || "?").slice(0, 2).toUpperCase();
 };
 
 export const App = () => {
@@ -227,7 +233,8 @@ export const App = () => {
           return (
             <article className={`preset-card${isActive ? " is-previewing" : ""}`} key={preset.relativePath} onPointerEnter={() => queuePreview(preset)} onPointerLeave={cancelQueuedPreview}>
               <button className="preset-preview-btn" type="button" disabled={Boolean(previewing) || Boolean(applying) || clearingFilters} onFocus={() => queuePreview(preset, 0)} onClick={() => (isActive ? applyPreset(preset) : previewPreset(preset))} title={isActive ? `Apply ${preset.name}` : `Preview ${preset.name}`}>
-                {isApplying ? "Applying..." : isPreviewing ? "Previewing..." : preset.name}
+                <span className="preset-abbr" aria-hidden="true">{presetInitials(preset.name)}</span>
+                <span className="preset-name">{isApplying ? "Applying..." : isPreviewing ? "Previewing..." : preset.name}</span>
               </button>
               <button className="apply-mini" type="button" disabled={Boolean(previewing) || Boolean(applying) || clearingFilters} onClick={() => applyPreset(preset)}>Apply</button>
             </article>
