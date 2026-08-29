@@ -1,3 +1,4 @@
+/* RAW PREVIEW V2 - docked-height layout fix */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./raw-preview.scss";
 import * as webviewAPI from "./webview-api";
@@ -161,7 +162,7 @@ export const App = () => {
       <header className="raw-preview-header">
         <div className="header-actions">
           <button className="icon-btn" type="button" onClick={refreshDocument}>Refresh</button>
-          {activePreview ? <button className="icon-btn" type="button" disabled={Boolean(previewing)} onClick={clearPreview}>Clear preview</button> : null}
+          {activePreview ? <button className="icon-btn clear-preview-header" type="button" disabled={Boolean(previewing)} onClick={clearPreview}>Clear preview</button> : null}
           <button className="icon-btn clear-filters" type="button" disabled={clearingFilters} onClick={clearFilters}>{clearingFilters ? "Clearing..." : "Clear filters"}</button>
           <button className="icon-btn" type="button" onClick={toggleControls}>{controlsCollapsed ? "Options" : "Hide options"}</button>
         </div>

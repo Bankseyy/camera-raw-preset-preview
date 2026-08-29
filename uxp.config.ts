@@ -1,3 +1,4 @@
+/* RAW PREVIEW V2 - docked-height layout fix */
 import { UXP_Manifest, UXP_Config, UXP_Config_Extra } from "vite-uxp-plugin";
 import { version } from "./package.json";
 
@@ -18,11 +19,12 @@ const manifest: UXP_Manifest = {
   name,
   version,
   main: "index.html",
-  manifestVersion: 6,
+  manifestVersion: 4,
   host: [
     {
       app: "PS",
       minVersion: "24.4.0",
+      data: { apiVersion: 2 },
     },
                       ],
   entrypoints: [
@@ -32,9 +34,9 @@ const manifest: UXP_Manifest = {
       label: {
         default: name,
       },
-      minimumSize: { width: 200, height: 160 },
+      minimumSize: { width: 230, height: 90 },
       maximumSize: { width: 2000, height: 2000 },
-      preferredDockedSize: { width: 230, height: 360 },
+      preferredDockedSize: { width: 230, height: 120 },
       preferredFloatingSize: { width: 760, height: 700 },
       icons: [
         {
