@@ -1,8 +1,9 @@
-/* RAW PREVIEW V2 - docked-height layout fix */
+/* RAW PREVIEW V4 - Photoshop keyboard focus handoff */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./raw-preview.scss";
 import * as webviewAPI from "./webview-api";
 import { initWebview } from "./webview-setup";
+import { releasePanelFocus } from "./releasePanelFocus";
 
 type Preset = { relativePath: string; name: string };
 type Folder = { name: string; persistent: boolean };
@@ -27,7 +28,7 @@ export const App = () => {
   const [controlsCollapsed, setControlsCollapsed] = useState(false);
   const hoverTimer = useRef<number | null>(null);
 
-  const releaseFocus = useCallback(() => { void (api as any).releasePhotoshopFocus?.(); }, [api]);
+  const releaseFocus = useCallback(() => { releasePanelFocus(api as any); }, [api]);
 
   const refreshDocument = useCallback(async () => {
     try {
@@ -35,6 +36,11 @@ export const App = () => {
       setDocumentName(document?.title ?? null);
     } catch (_) { setDocumentName(null); }
   }, [api]);
+
+  const refreshAndReleaseFocus = async () => {
+    try { await refreshDocument(); }
+    finally { releaseFocus(); }
+  };
 
   const loadPresets = useCallback(async (quiet = false) => {
     try {
@@ -116,6 +122,7 @@ export const App = () => {
       await (api as any).setCameraRawPanelPreferences({ hoverPreview: enabled });
       setStatus(`Hover preview ${enabled ? "enabled" : "disabled"}.`);
     } catch (error) { setStatus(cleanError(error)); }
+    finally { releaseFocus(); }
   };
 
   const toggleControls = async () => {
@@ -124,6 +131,7 @@ export const App = () => {
     try {
       await (api as any).setCameraRawPanelPreferences({ controlsCollapsed: next });
     } catch (error) { setStatus(cleanError(error)); }
+    finally { releaseFocus(); }
   };
 
   const clearPreview = async () => {
@@ -161,7 +169,7 @@ export const App = () => {
     <main className="raw-preview-app">
       <header className="raw-preview-header">
         <div className="header-actions">
-          <button className="icon-btn" type="button" onClick={refreshDocument}>Refresh</button>
+          <button className="icon-btn" type="button" onClick={() => void refreshAndReleaseFocus()}>Refresh</button>
           {activePreview ? <button className="icon-btn clear-preview-header" type="button" disabled={Boolean(previewing)} onClick={clearPreview}>Clear preview</button> : null}
           <button className="icon-btn clear-filters" type="button" disabled={clearingFilters} onClick={clearFilters}>{clearingFilters ? "Clearing..." : "Clear filters"}</button>
           <button className="icon-btn" type="button" onClick={toggleControls}>{controlsCollapsed ? "Options" : "Hide options"}</button>
@@ -174,7 +182,7 @@ export const App = () => {
           <div className="source-row"><span className="source-label">XMP folder</span><strong>{folder?.name ?? "Not selected"}</strong></div>
           <div className="source-actions">
             <button className="secondary-btn" type="button" onClick={chooseFolder}>Choose folder</button>
-            <button className="secondary-btn" type="button" disabled={!folder || loading} onClick={() => loadPresets()}>Reload</button>
+            <button className="secondary-btn" type="button" disabled={!folder || loading} onClick={() => { void loadPresets().finally(releaseFocus); }}>Reload</button>
             <button className="clear-btn" type="button" disabled={!activePreview || Boolean(previewing)} onClick={clearPreview}>Clear preview</button>
             <label className="hover-toggle"><input type="checkbox" checked={hoverPreviewEnabled} onChange={event => void setHoverMode(event.target.checked)} /> Hover preview</label>
           </div>
